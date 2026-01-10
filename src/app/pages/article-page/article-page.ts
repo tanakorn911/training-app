@@ -7,9 +7,11 @@ import { ArticleService } from './article-service';
 import { Review } from './components/review-item-component/types';
 import { ThemeService } from '../../shared/services/theme.service';
 
+import { FooterComponent } from '../home-page/components/footer-component/footer-component';
+
 @Component({
   selector: 'app-article-page',
-  imports: [SegmentedNavComponent, ReviewItemComponent, ReviewSummaryComponent, WriteReviewComponent],
+  imports: [SegmentedNavComponent, ReviewItemComponent, ReviewSummaryComponent, WriteReviewComponent, FooterComponent],
   templateUrl: './article-page.html',
   styleUrl: './article-page.css',
 })

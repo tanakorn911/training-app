@@ -1,1 +1,23 @@
-<app-segmented-nav-component/>
+<div class="flex w-full">
+  <div class="fixed inset-0 flex justify-center sm:px-8">
+    <div class="flex w-full max-w-7xl lg:px-8">
+      <div
+        class="w-full bg-white ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-300/20"
+      ></div>
+    </div>
+  </div>
+  <div class="relative flex w-full flex-col">
+    <div class="w-full flex items-center justify-center pt-6">
+      <app-segmented-nav-component />
+    </div>
+
+    <main class="flex-auto">
+      <div class="mx-auto mt-8 max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+        <!-- Content will go here -->
+        <h1 class="text-2xl font-bold dark:text-zinc-100">Uses</h1>
+        <p class="mt-4 text-zinc-600 dark:text-zinc-400">Tools and gear list coming soon...</p>
+      </div>
+    </main>
+    <app-footer-component />
+  </div>
+</div>

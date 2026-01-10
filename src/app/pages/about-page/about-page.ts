@@ -3,9 +3,11 @@ import { SegmentedNavComponent } from '../../shared/components/segmented-nav-com
 import { GitHubService, GitHubProfile } from '../../shared/services/github.service';
 import { BioComponent } from './components/bio-component/bio-component';
 
+import { FooterComponent } from '../home-page/components/footer-component/footer-component';
+
 @Component({
   selector: 'app-about-page',
-  imports: [SegmentedNavComponent, BioComponent],
+  imports: [SegmentedNavComponent, BioComponent, FooterComponent],
   templateUrl: './about-page.html',
   styleUrl: './about-page.css',
 })

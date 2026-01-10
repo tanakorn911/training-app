@@ -14,8 +14,13 @@ body {
   color-scheme: light; /* ค่าเริ่มต้น */
 }
 
+/* Force scrollbar to prevent layout shift between pages */
+html {
+  overflow-y: scroll;
+}
+
 :root[class="dark"] {
-  color-scheme: dark; /* สำคัญมาก! ทำให้ Scrollbar ของ Chrome เป็นสีดำ */
+  color-scheme: dark;
 }
 
 .dark body {

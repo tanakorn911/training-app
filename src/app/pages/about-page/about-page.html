@@ -1,15 +1,27 @@
-<div class="bg-white dark:bg-zinc-900 pt-6 min-h-screen transition-colors duration-300">
-  <div class="flex justify-center items-center">
-    <app-segmented-nav-component />
-  </div>
-
-  <div class="mx-auto mt-8 max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
-    @if (isLoading()) {
-    <div class="flex justify-center items-center py-20">
-      <div class="animate-pulse text-gray-500 dark:text-zinc-400">Loading profile...</div>
+<div class="flex w-full">
+  <div class="fixed inset-0 flex justify-center sm:px-8">
+    <div class="flex w-full max-w-7xl lg:px-8">
+      <div
+        class="w-full bg-white ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-300/20"
+      ></div>
     </div>
-    } @else {
-    <app-bio-component [profile]="profile()" />
-    }
+  </div>
+  <div class="relative flex w-full flex-col">
+    <div class="w-full flex items-center justify-center pt-6">
+      <app-segmented-nav-component />
+    </div>
+
+    <main class="flex-auto">
+      <div class="mx-auto mt-8 max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+        @if (isLoading()) {
+        <div class="flex justify-center items-center py-20">
+          <div class="animate-pulse text-gray-500 dark:text-zinc-400">Loading profile...</div>
+        </div>
+        } @else {
+        <app-bio-component [profile]="profile()" />
+        }
+      </div>
+    </main>
+    <app-footer-component />
   </div>
 </div>
