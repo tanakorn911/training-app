@@ -1,0 +1,35 @@
+<div class="bg-white dark:bg-zinc-900 pt-6 min-h-screen transition-colors duration-300">
+  <div class="flex justify-center items-center">
+    <app-segmented-nav-component />
+  </div>
+  <div
+    class="mx-auto mt-8 bg-white dark:bg-zinc-900 ring-1 ring-zinc-100 dark:ring-zinc-700/40 max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-32"
+  >
+    <!-- Left Column: Review Summary -->
+    <div class="lg:col-span-4">
+      <app-review-summary-component [reviews]="reviews()" />
+
+      <!-- Share Feedback Section -->
+      <div class="mt-8">
+        <app-write-review-component (reviewSubmitted)="loadReviews()" />
+      </div>
+    </div>
+
+    <!-- Right Column: Review List -->
+    <div class="mt-16 lg:col-span-6 lg:col-start-7 lg:mt-0">
+      <div class="max-h-[600px] overflow-y-auto pr-2">
+        <div class="divide-y divide-gray-200">
+          @if (isLoading()) {
+          <div class="py-12 text-center text-gray-500">Loading reviews...</div>
+          } @else if (reviews().length === 0) {
+          <div class="py-12 text-center text-gray-500">
+            No reviews yet. Be the first to share your feedback!
+          </div>
+          } @else { @for (review of reviews(); track review.username + review.comment) {
+          <app-review-item-component [review]="review" />
+          } }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,86 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+/* Enable dark mode with class selector for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Global dark mode styles */
+body {
+  @apply bg-white transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-zinc-900;
+}
+
+/* Default (Light Mode) Components */
+/* Input Text & Textarea */
+.p-inputtext,
+.p-textarea {
+  @apply border-zinc-300 text-zinc-900 bg-white placeholder-zinc-400;
+}
+
+.p-inputtext:enabled:focus,
+.p-textarea:enabled:focus {
+  @apply border-blue-500 ring-blue-500/20;
+}
+
+.p-inputtext:enabled:hover,
+.p-textarea:enabled:hover {
+  @apply border-zinc-400;
+}
+
+/* Secondary Button (Cancel) - Light Mode */
+.p-button.p-button-secondary {
+  @apply bg-zinc-100 border-zinc-200 text-zinc-700;
+}
+
+.p-button.p-button-secondary:enabled:hover {
+  @apply bg-zinc-200 border-zinc-300 text-zinc-800;
+}
+
+/* PrimeNG Dark Mode Overrides */
+:root[class="dark"] {
+  /* Dialog Container */
+  .p-dialog {
+    @apply bg-zinc-900 border-zinc-700;
+    border: 1px solid var(--color-zinc-700);
+  }
+
+  .p-dialog .p-dialog-header,
+  .p-dialog .p-dialog-content,
+  .p-dialog .p-dialog-footer {
+    @apply bg-zinc-900 border-zinc-700 text-zinc-100;
+  }
+  
+  .p-dialog .p-dialog-header-icon {
+    @apply text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800;
+  }
+
+  /* Input Text & Textarea Override */
+  .p-inputtext,
+  .p-textarea {
+    @apply bg-zinc-800 border-zinc-700 text-zinc-100 placeholder-zinc-500;
+  }
+  
+  /* Focus State (Blue) - Keep consistent with Light Mode */
+  .p-inputtext:enabled:focus,
+  .p-textarea:enabled:focus {
+    @apply border-blue-500 ring-blue-500/20;
+  }
+  
+  .p-inputtext:enabled:hover,
+  .p-textarea:enabled:hover {
+    @apply border-zinc-600;
+  }
+
+  /* Secondary Button (Cancel) Override */
+  .p-button.p-button-secondary {
+    @apply bg-zinc-700 border-zinc-700 text-zinc-100;
+  }
+
+  .p-button.p-button-secondary:enabled:hover {
+    @apply bg-zinc-600 border-zinc-600 text-zinc-50;
+  }
+}

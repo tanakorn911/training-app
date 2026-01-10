@@ -1,0 +1,31 @@
+<div class="review-summary">
+  <h2 class="text-lg font-bold text-gray-900 dark:text-zinc-100">Customer Reviews</h2>
+
+  <!-- Average Rating -->
+  <div class="mt-3 flex items-center gap-3">
+    <p-rating [ngModel]="summary().avgRating" [readonly]="true" [stars]="5" />
+    <span class="text-sm text-gray-600 dark:text-zinc-400"
+      >Based on {{ summary().totalReviews }} reviews</span
+    >
+  </div>
+
+  <!-- Rating Distribution Bars -->
+  <div class="mt-6 space-y-3">
+    @for (item of ratingBars(); track item.star) {
+    <div class="flex items-center gap-3">
+      <span class="text-base font-medium text-gray-700 dark:text-zinc-300">{{ item.star }}</span>
+      <p-rating [ngModel]="1" [readonly]="true" [stars]="1" />
+      <div class="flex-1">
+        <p-progressbar [value]="item.percentage">
+          <ng-template #content let-value>
+            <span class="text-xs font-semibold text-white">{{ value }}%</span>
+          </ng-template>
+        </p-progressbar>
+      </div>
+      <span class="w-10 text-right text-sm text-gray-700 dark:text-zinc-300"
+        >{{ item.percentage }}%</span
+      >
+    </div>
+    }
+  </div>
+</div>
