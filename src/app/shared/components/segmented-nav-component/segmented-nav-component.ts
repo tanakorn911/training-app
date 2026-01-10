@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { SegmentedNavItem } from './types';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from "@angular/router";
@@ -16,6 +16,7 @@ export class SegmentedNavComponent {
   private readonly themeService = inject(ThemeService);
 
   isDarkMode = this.themeService.isDarkMode;
+  isMobileMenuOpen = signal(false);
 
   navItems: SegmentedNavItem[] = [
     { label: 'Home', href: '/' },
@@ -28,5 +29,9 @@ export class SegmentedNavComponent {
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen.update((v) => !v);
   }
 }

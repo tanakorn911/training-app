@@ -7,25 +7,15 @@
 </div>
 
 <!-- Feedback Dialog -->
-<p-dialog
-  header="Write your feedback"
-  [(visible)]="visible"
-  [modal]="true"
-  [closable]="true"
-  [style]="{ width: '420px' }"
->
+<p-dialog header="Write your feedback" [(visible)]="visible" [modal]="true" [closable]="true"
+  [style]="{ width: '90vw', maxWidth: '420px' }">
   <div class="flex flex-col space-y-4">
     <!-- Name -->
     <div>
       <label class="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
         Your name
       </label>
-      <input
-        pInputText
-        [(ngModel)]="review.username"
-        placeholder="Enter your name"
-        class="w-full"
-      />
+      <input pInputText [(ngModel)]="review.username" placeholder="Enter your name" class="w-full" />
     </div>
 
     <!-- Rating -->
@@ -41,24 +31,15 @@
       <label class="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
         Feedback
       </label>
-      <textarea
-        pInputTextarea
-        [(ngModel)]="review.comment"
-        rows="4"
-        class="w-full"
-        placeholder="Write your feedback..."
-      ></textarea>
+      <textarea pInputTextarea [(ngModel)]="review.comment" rows="4" class="w-full"
+        placeholder="Write your feedback..."></textarea>
     </div>
 
     <!-- Actions -->
     <div class="flex justify-end gap-2 pt-2">
       <p-button label="Cancel" severity="secondary" (click)="hideDialog()" />
-      <p-button
-        label="Submit"
-        [disabled]="!review.username || !review.rating || !review.comment || isSubmitting"
-        [loading]="isSubmitting"
-        (click)="submitReview()"
-      />
+      <p-button label="Submit" [disabled]="!review.username || !review.rating || !review.comment || isSubmitting"
+        [loading]="isSubmitting" (click)="submitReview()" />
     </div>
   </div>
 </p-dialog>

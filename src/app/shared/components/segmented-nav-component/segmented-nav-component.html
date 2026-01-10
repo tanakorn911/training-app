@@ -1,56 +1,105 @@
-<div class="pointer-events-auto flex flex-1 justify-center items-center gap-4">
-  <nav>
+<div class="pointer-events-auto flex flex-1 justify-end md:justify-center items-center gap-4">
+  <!-- Desktop Navigation -->
+  <nav class="hidden md:block">
     <ul
-      class="flex rounded-full bg-white/90 dark:bg-zinc-800/90 px-3 text-sm font-medium text-zinc-800 dark:text-zinc-200 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:ring-white/10 backdrop-blur-sm"
-    >
+      class="flex rounded-full bg-white/90 dark:bg-zinc-800/90 px-3 text-sm font-medium text-zinc-800 dark:text-zinc-200 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:ring-white/10 backdrop-blur-sm">
       <li *ngFor="let item of navItems">
-        <a
-          [routerLink]="item.href"
-          routerLinkActive="text-teal-500"
-          [routerLinkActiveOptions]="{ exact: true }"
-          class="relative block px-3 py-2 transition hover:text-teal-500"
-        >
+        <a [routerLink]="item.href" routerLinkActive="text-teal-500" [routerLinkActiveOptions]="{ exact: true }"
+          class="relative block px-3 py-2 transition hover:text-teal-500">
           {{ item.label }}
         </a>
       </li>
     </ul>
   </nav>
 
-  <!-- Theme Toggle Button -->
-  <button
-    (click)="toggleTheme()"
-    [attr.aria-label]="isDarkMode() ? 'Switch to light theme' : 'Switch to dark theme'"
-    class="group rounded-full bg-white/90 px-3 py-2 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
-  >
+  <!-- Mobile Menu Button -->
+  <div class="md:hidden flex items-center gap-4">
+    <!-- Theme Toggle (Visible on mobile next to menu) -->
+    <button (click)="toggleTheme()" [attr.aria-label]="isDarkMode() ? 'Switch to light theme' : 'Switch to dark theme'"
+      class="group rounded-full bg-white/90 px-3 py-2 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20">
+      @if (isDarkMode()) {
+      <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+        class="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700">
+        <path
+          d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 8 12.25Z">
+        </path>
+        <path
+          d="M12.25 3v1.5M21.5 12.25H20M18.791 18.791l-1.06-1.06M18.791 5.709l-1.06 1.06M12.25 20v1.5M4.5 12.25H3M6.77 6.77 5.709 5.709M6.77 17.73l-1.061 1.061"
+          fill="none"></path>
+      </svg>
+      } @else {
+      <svg viewBox="0 0 24 24" aria-hidden="true"
+        class="h-6 w-6 fill-zinc-700 stroke-zinc-500 transition group-hover:stroke-zinc-400">
+        <path
+          d="M17.25 16.22a6.937 6.937 0 0 1-9.47-9.47 7.451 7.451 0 1 0 9.47 9.47ZM12.75 7C17 7 17 2.75 17 2.75S17 7 21.25 7C17 7 17 11.25 17 11.25S17 7 12.75 7Z"
+          stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      }
+    </button>
+
+    <button (click)="toggleMobileMenu()"
+      class="group flex items-center justify-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20"
+      aria-label="Toggle menu">
+      Menu
+      <svg viewBox="0 0 8 6" aria-hidden="true"
+        class="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400">
+        <path d="M1.75 1.75 4 4.25l2.25-2.5" fill="none" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div *ngIf="isMobileMenuOpen()" class="fixed inset-0 z-50 flex items-start justify-end pr-4 sm:pr-6 md:hidden">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-zinc-800/40 opacity-100 backdrop-blur-sm dark:bg-black/80" (click)="toggleMobileMenu()"
+      aria-hidden="true"></div>
+
+    <!-- Menu Panel -->
+    <div
+      class="fixed inset-x-4 top-8 z-[100] origin-top rounded-3xl bg-white p-8 ring-1 ring-zinc-900/5 dark:bg-zinc-900 dark:ring-zinc-800"
+      tabindex="-1">
+      <div class="flex flex-row-reverse items-center justify-between">
+        <button (click)="toggleMobileMenu()" aria-label="Close menu" class="-m-1 p-1" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="h-6 w-6 text-zinc-500 dark:text-zinc-400">
+            <path d="m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+        <h2 class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+          Navigation
+        </h2>
+      </div>
+      <nav class="mt-6">
+        <ul class="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
+          <li *ngFor="let item of navItems">
+            <a [routerLink]="item.href" (click)="toggleMobileMenu()" class="block py-2" routerLinkActive="text-teal-500"
+              [routerLinkActiveOptions]="{ exact: true }">{{ item.label }}</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Desktop Theme Toggle Button (Original Position) -->
+  <button (click)="toggleTheme()" [attr.aria-label]="isDarkMode() ? 'Switch to light theme' : 'Switch to dark theme'"
+    class="hidden md:block group rounded-full bg-white/90 px-3 py-2 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20">
     @if (isDarkMode()) {
-    <svg
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-      class="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700"
-    >
+    <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+      class="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700">
       <path
-        d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 nc-7.25v0Z"
-      ></path>
+        d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 8 12.25Z">
+      </path>
       <path
         d="M12.25 3v1.5M21.5 12.25H20M18.791 18.791l-1.06-1.06M18.791 5.709l-1.06 1.06M12.25 20v1.5M4.5 12.25H3M6.77 6.77 5.709 5.709M6.77 17.73l-1.061 1.061"
-        fill="none"
-      ></path>
+        fill="none"></path>
     </svg>
     } @else {
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      class="h-6 w-6 fill-zinc-700 stroke-zinc-500 transition group-hover:stroke-zinc-400"
-    >
+    <svg viewBox="0 0 24 24" aria-hidden="true"
+      class="h-6 w-6 fill-zinc-700 stroke-zinc-500 transition group-hover:stroke-zinc-400">
       <path
         d="M17.25 16.22a6.937 6.937 0 0 1-9.47-9.47 7.451 7.451 0 1 0 9.47 9.47ZM12.75 7C17 7 17 2.75 17 2.75S17 7 21.25 7C17 7 17 11.25 17 11.25S17 7 12.75 7Z"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></path>
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
     </svg>
     }
   </button>
