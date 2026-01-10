@@ -1,1 +1,15 @@
-<app-segmented-nav-component/>
+<div class="bg-white dark:bg-zinc-900 pt-6 min-h-screen transition-colors duration-300">
+  <div class="flex justify-center items-center">
+    <app-segmented-nav-component />
+  </div>
+
+  <div class="mx-auto mt-8 max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+    @if (isLoading()) {
+    <div class="flex justify-center items-center py-20">
+      <div class="animate-pulse text-gray-500 dark:text-zinc-400">Loading profile...</div>
+    </div>
+    } @else {
+    <app-bio-component [profile]="profile()" />
+    }
+  </div>
+</div>
