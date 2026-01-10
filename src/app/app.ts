@@ -1,5 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './shared/services/theme.service'; //
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -8,4 +10,6 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('training-app');
+
+  constructor(private themeService: ThemeService) {} 
 }

@@ -3,31 +3,43 @@
     <app-segmented-nav-component />
   </div>
   <div
-    class="mx-auto mt-8 bg-white dark:bg-zinc-900 ring-1 ring-zinc-100 dark:ring-zinc-700/40 max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-32"
+    class="mx-auto mt-8 bg-white dark:bg-zinc-900 ring-1 ring-zinc-100 dark:ring-zinc-700/40 max-w-2xl px-4 py-8 sm:px-6 sm:py-10 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-18"
   >
     <!-- Left Column: Review Summary -->
-    <div class="lg:col-span-4">
-      <app-review-summary-component [reviews]="reviews()" />
+    <div class="lg:col-span-5">
+      <div
+        class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 shadow-sm"
+      >
+        <app-review-summary-component [reviews]="reviews()" />
+      </div>
 
       <!-- Share Feedback Section -->
       <div class="mt-8">
-        <app-write-review-component (reviewSubmitted)="loadReviews()" />
+        <div
+          class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 shadow-sm"
+        >
+          <app-write-review-component (reviewSubmitted)="loadReviews()" />
+        </div>
       </div>
     </div>
 
     <!-- Right Column: Review List -->
     <div class="mt-16 lg:col-span-6 lg:col-start-7 lg:mt-0">
-      <div class="max-h-[600px] overflow-y-auto pr-2">
-        <div class="divide-y divide-gray-200">
-          @if (isLoading()) {
-          <div class="py-12 text-center text-gray-500">Loading reviews...</div>
-          } @else if (reviews().length === 0) {
-          <div class="py-12 text-center text-gray-500">
-            No reviews yet. Be the first to share your feedback!
+      <div
+        class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 shadow-sm"
+      >
+        <div class="max-h-[650px] overflow-y-auto pr-2">
+          <div class="divide-y divide-gray-200">
+            @if (isLoading()) {
+            <div class="py-12 text-center text-gray-500">Loading reviews...</div>
+            } @else if (reviews().length === 0) {
+            <div class="py-12 text-center text-gray-500">
+              No reviews yet. Be the first to share your feedback!
+            </div>
+            } @else { @for (review of reviews(); track review.username + review.comment) {
+            <app-review-item-component [review]="review" />
+            } }
           </div>
-          } @else { @for (review of reviews(); track review.username + review.comment) {
-          <app-review-item-component [review]="review" />
-          } }
         </div>
       </div>
     </div>

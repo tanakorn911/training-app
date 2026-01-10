@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
-@import "tailwindcss-primeui";
+@plugin "tailwindcss-primeui";
 
 /* Enable dark mode with class selector for Tailwind v4 */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -8,6 +8,14 @@
 /* Global dark mode styles */
 body {
   @apply bg-white transition-colors duration-300;
+}
+
+:root {
+  color-scheme: light; /* ค่าเริ่มต้น */
+}
+
+:root[class="dark"] {
+  color-scheme: dark; /* สำคัญมาก! ทำให้ Scrollbar ของ Chrome เป็นสีดำ */
 }
 
 .dark body {
