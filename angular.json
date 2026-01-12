@@ -30,7 +30,11 @@
             ],
             "polyfills": [
               "zone.js"
-            ]
+            ],
+            "loader": {
+              ".ttf": "file",
+              ".woff2": "file"
+            }
           },
           "configurations": {
             "production": {
