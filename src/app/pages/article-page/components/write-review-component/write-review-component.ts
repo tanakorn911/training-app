@@ -58,9 +58,8 @@ export class WriteReviewComponent {
         // Emit event to notify parent to refresh the list
         this.reviewSubmitted.emit();
       }),
-      catchError(err => {
-        // Case Error
-        console.log('err', err);
+      catchError(() => {
+        // Case Error - silently handle or show user notification
         return EMPTY;
       }),
       finalize(() => this.isSubmitting = false)

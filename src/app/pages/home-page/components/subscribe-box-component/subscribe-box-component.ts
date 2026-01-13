@@ -14,7 +14,7 @@ export class SubscribeBoxComponent {
   }
 
   onSubmit() {
-    var currentEmailValue = this.email();
+    const currentEmailValue = this.email();
     console.log('Email:', currentEmailValue);
   }
 }
