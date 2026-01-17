@@ -11,6 +11,10 @@ import FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
 // CSV Layer //
 import CSVLayer from "@arcgis/core/layers/CSVLayer.js";
 import HeatmapRenderer from "@arcgis/core/renderers/HeatmapRenderer.js";
+import * as geodesicBufferOperator from "@arcgis/core/geometry/operators/geodesicBufferOperator.js";
+import Point from "@arcgis/core/geometry/Point.js";
+import FeatureEffect from "@arcgis/core/layers/support/FeatureEffect.js";
+import FeatureFilter from "@arcgis/core/layers/support/FeatureFilter.js";
 
 @Component({
   selector: 'app-demo-gis-page',
@@ -36,6 +40,21 @@ export class DemoGisPage implements OnInit, OnDestroy, AfterViewInit {
         "<b>Type:</b> {amenity} <br><b>Place:</b> {place} <br>",
     }
   });
+
+  restaurantCSVLayer = new CSVLayer({
+    url: "https://raw.githubusercontent.com/marklukky-art/dataset_for_workshop/refs/heads/main/data.csv",
+    latitudeField: "Latitude",
+    longitudeField: "Longitude",
+    popupTemplate: {
+      title: "{Restaurant Name}",
+      content: `
+      <b>Has Delivery:</b> {Has Online delivery}<br/>
+      <b>Cuisines:</b> {Cuisines}<br/>
+      <b>Address:</b> {Address}
+    `
+    }
+  });
+
   provinceFeatureLayer = new FeatureLayer({
     url: "https://services1.arcgis.com/jSaRWj2TDlcN1zOC/ArcGIS/rest/services/Thailand_Province_Boundaries_view/FeatureServer/1",
     outFields: ["*"]
@@ -46,6 +65,54 @@ export class DemoGisPage implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initializeMap();
+  }
+
+  demo() {
+    if (!this.mapView) return;
+
+    this.mapView.goTo({
+      center: [78.52562187378993, 20.39684625056514],
+      zoom: 5
+    })
+    // clear all old graphics
+    this.demoGraphicsLayer.removeAll();
+    const currentLocationUser = new Point({
+      longitude: 78.52562187378993,
+      latitude: 20.39684625056514,
+    })
+    const userSymbol: any = {
+      type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+      url: "https://cdn-icons-png.flaticon.com/128/3710/3710297.png",
+      width: "34px",
+      height: "34px"
+    }
+
+    const userGraphic = new Graphic({ geometry: currentLocationUser, symbol: userSymbol });
+
+    if (geodesicBufferOperator.isLoaded()) {
+      const bufferGeometry = geodesicBufferOperator.execute(currentLocationUser, 700, { unit: "kilometers" });
+      const bufferGraphic = new Graphic({
+        geometry: bufferGeometry,
+        symbol: {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: [255, 255, 0, 0.6],
+          outline: {
+            color: [0, 0, 0, 0.5],
+            width: 2
+          }
+        }
+      })
+      // this.demoGraphicsLayer.add(bufferGraphic);
+      this.demoGraphicsLayer.add(userGraphic);
+      ;
+      this.restaurantCSVLayer.featureEffect = {
+        filter: {
+          geometry: bufferGraphic.geometry,
+          spatialRelationship: "intersects",
+        },
+        excludedEffect: "grayscale(100%) opacity(0%)",
+      }
+    }
   }
 
   async initializeMap(): Promise<any> {
@@ -64,6 +131,76 @@ export class DemoGisPage implements OnInit, OnDestroy, AfterViewInit {
 
     this.map.add(this.demoGraphicsLayer);
     this.map.add(this.restaurantGraphicsLayer);
+    await geodesicBufferOperator.load();
+    this.restaurantCSVLayer.renderer = {
+      type: "unique-value",  // autocasts as new UniqueValueRenderer()
+      field: "Cuisines",
+      defaultSymbol: {
+        type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+        url: "https://cdn-icons-png.flaticon.com/128/7720/7720630.png",
+        width: "34px",
+        height: "34px"
+      },
+      uniqueValueInfos: [
+        {
+          value: "North Indian",
+          symbol: {
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: "https://cdn-icons-png.flaticon.com/128/4727/4727322.png",
+            width: "28px",
+            height: "28px"
+          },
+        },
+        {
+          value: "Chinese",
+          symbol: {
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: "https://cdn-icons-png.flaticon.com/128/6548/6548182.png",
+            width: "28px",
+            height: "28px"
+          },
+        },
+        {
+          value: "Bakery",
+          symbol: {
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: "https://cdn-icons-png.flaticon.com/128/3081/3081967.png",
+            width: "28px",
+            height: "28px"
+          },
+        },
+        {
+          value: "Cafe",
+          symbol: {
+            type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+            url: "https://cdn-icons-png.flaticon.com/128/9620/9620771.png",
+            width: "28px",
+            height: "28px"
+          },
+        }
+      ]
+    };
+    this.map.add(this.restaurantCSVLayer);
+    // https://cdn-icons-png.flaticon.com/128/4714/4714377.png
+    this.restaurantCSVLayer.load().then(() => {
+      return this.restaurantCSVLayer.queryExtent();
+    }).then((result) => {
+      if (result.extent) {
+        this.mapView!.goTo(
+          result.extent.expand(1.2)
+        );
+      }
+    }).catch(err => {
+      console.error('CSV zoom error', err);
+    });
+
+    this.mapView.on("click", (event) => {
+      const { longitude, latitude } = event.mapPoint;
+
+      console.log("Clicked location:");
+      console.log("Latitude:", latitude);
+      console.log("Longitude:", longitude);
+    });
 
     this.mapView.when(() => { });
 

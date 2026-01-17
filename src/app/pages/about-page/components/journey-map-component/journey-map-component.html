@@ -1,0 +1,89 @@
+<div class="rounded-3xl p-6 mt-10 transition-all duration-300 border-2" [class]="isDarkMode() 
+       ? 'bg-gradient-to-br from-black via-gray-900 to-black border-red-900/60 shadow-2xl shadow-red-900/20' 
+       : 'bg-white border-gray-200 shadow-xl'">
+
+    <!-- Header -->
+    <div class="mb-6 flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-bold flex items-center gap-3 m-0"
+                [class]="isDarkMode() ? 'text-white' : 'text-gray-900'">
+                <span class="text-3xl">🗺️</span>
+                My Journey
+                <span class="px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider"
+                    [class]="isDarkMode() ? 'bg-red-600/20 text-red-500 border border-red-900/50' : 'bg-red-100 text-red-600 border border-red-200'">
+                    3D Map
+                </span>
+            </h2>
+            <p class="text-base mt-2 m-0 font-medium" [class]="isDarkMode() ? 'text-gray-400' : 'text-gray-500'">
+                Interact with the map to explore my path
+            </p>
+        </div>
+
+        <!-- Controls (Desktop) -->
+        <div class="hidden md:flex gap-2">
+            <button class="px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:scale-105 active:scale-95"
+                [class]="isDarkMode() 
+          ? 'bg-gray-800 text-gray-200 border border-gray-700 hover:bg-gray-700' 
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'" (click)="resetView()">
+                Reset View
+            </button>
+            <button class="px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:scale-105 active:scale-95"
+                [class]="isDarkMode() 
+          ? 'bg-red-900/30 text-red-400 border border-red-900/50 hover:bg-red-900/50' 
+          : 'bg-red-100 text-red-600 hover:bg-red-200'" (click)="showAllLocations()">
+                Show All
+            </button>
+        </div>
+    </div>
+
+    <!-- Grid Container -->
+    <div class="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 h-[600px]">
+
+        <!-- Location List Sidebar -->
+        <div class="flex flex-col gap-4 overflow-y-auto pr-2 max-h-[250px] md:max-h-none scrollbar-thin rounded-xl p-2"
+            [class]="isDarkMode() 
+           ? 'scrollbar-track-gray-900 scrollbar-thumb-gray-700 bg-black/20' 
+           : 'scrollbar-track-gray-100 scrollbar-thumb-gray-300 bg-gray-50'">
+            @for (location of locations; track location.id) {
+            <div class="flex items-start gap-4 p-5 rounded-2xl cursor-pointer transition-all duration-300 border-l-4"
+                [class]="getCardClasses(location)" (click)="flyToLocation(location)">
+                <div class="text-3xl w-12 h-12 flex items-center justify-center rounded-xl shadow-sm"
+                    [class]="isDarkMode() ? 'bg-gray-800' : 'bg-white'">
+                    {{ getTypeIcon(location.type) }}
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold m-0" [class]="isDarkMode() ? 'text-white' : 'text-gray-900'">
+                        {{ location.name }}
+                    </h3>
+                    <p class="text-sm mt-1 mb-2 font-medium" [class]="isDarkMode() ? 'text-gray-400' : 'text-gray-600'">
+                        {{ location.description }}
+                    </p>
+                    @if (location.year) {
+                    <span class="inline-block text-xs font-bold px-2 py-1 rounded-md" [class]="isDarkMode() 
+                      ? 'bg-gray-800 text-gray-300' 
+                      : 'bg-white text-gray-600 border border-gray-200'">
+                        {{ location.year }}
+                    </span>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+
+        <!-- 3D Map -->
+        <div class="relative rounded-2xl overflow-hidden shadow-inner border-2 min-h-[400px]"
+            [class]="isDarkMode() ? 'border-gray-800' : 'border-gray-200'">
+            <div #mapViewNode class="w-full h-full"></div>
+
+            <!-- Mobile Controls Overlay -->
+            <div class="md:hidden absolute bottom-4 left-4 right-4 flex justify-between pointer-events-none">
+                <div class="pointer-events-auto flex gap-2">
+                    <button
+                        class="w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg transition-all active:scale-90"
+                        [class]="isDarkMode() ? 'bg-black/80 text-white backdrop-blur-sm' : 'bg-white text-gray-800'"
+                        (click)="resetView()">🌏</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
